@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" ng-app="game">
   <head>
-    <title>mapthing</title>
+    <title>Gaff</title>
     <meta charset="utf-8" /> 
     
     <link rel="stylesheet" type="text/css" href="lib/panojs/style/panojs.css" />
@@ -20,7 +20,7 @@
     <script type="text/javascript" src="lib/panojs/js/control_thumbnail.js"></script>
     <script type="text/javascript" src="lib/panojs/js/control_info.js"></script>
     <script type="text/javascript" src="lib/panojs/js/control_svg.js"></script>
-    <script type='text/javascript'>less = {env:'development',async:false};</script>
+    <script type='text/javascript'>less = {env:'production',async:false};</script>
     <script type='text/javascript' src='/lib/less-1.5.0/js/less.min.js'></script>
 
     
@@ -32,6 +32,8 @@
     <script type="text/javascript" src="js/character.js"></script>
     <script type="text/javascript" src="js/asset.js"></script>
     <script type="text/javascript" src="js/dialogue.js"></script>
+    <script type="text/javascript" src="js/playerinfo.js"></script>
+    <script type="text/javascript" src="js/inventory.js"></script>
     <script type="text/javascript" src="js/map-location.js"></script>
     <script type="text/javascript" src="js/scene.js"></script>
     <script type="text/javascript" src="js/scene-interaction.js"></script>
@@ -46,10 +48,13 @@
       <scene></scene>
       <item-inspector></item-inspector>
       <debugger></debugger>
+      <playerinfo></playerinfo>
+      <inventory></inventory>
       <div class='toolbar btn-toolbar'>
         <div class='btn-group'>
           <button type='button' class='btn btn-default' data-toggle='tooltip' data-placement='bottom' title='Map'><span class='glyphicon glyphicon-globe'></span></button>
-          <button type='button' class='btn btn-default' data-toggle='tooltip' data-placement='bottom' title='Player'><span class='glyphicon glyphicon-user'></span></button>
+          <button type='button' ng-click='togglePlayerInfo()' class='btn btn-default' data-toggle='tooltip' data-placement='bottom' title='Player'><span class='glyphicon glyphicon-user'></span></button>
+          <button type='button' ng-click='toggleInventory()' class='btn btn-default' data-toggle='tooltip' data-placement='bottom' title='Inventory'><span class='glyphicon glyphicon-briefcase'></span></button>
           <button type='button' class='btn btn-default' data-toggle='tooltip' data-placement='bottom' title='Save'><span class='glyphicon glyphicon-floppy-disk'></span></button>
         </div>
         <div class='btn-group'>

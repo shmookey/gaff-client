@@ -17,9 +17,11 @@ game.directive ('game', function() {
         $('.toolbar button').tooltip({container:'.toolbar'});
     };
 
-    var controller = ['$scope', '$http', 'World', 'WorldMap', 'Assets', 'Character', 'Debugger',
-      function($scope, $http, World, WorldMap, Assets, Character, Debugger) {
+    var controller = ['$scope', '$http', 'World', 'WorldMap', 'Assets', 'Character', 'UIPlayerInfo', 'UIInventory', 'Debugger',
+      function($scope, $http, World, WorldMap, Assets, Character, UIPlayerInfo, UIInventory, Debugger) {
         $scope.debugEnabled = Debugger.enabled;
+        $scope.playerInfoEnabled = UIPlayerInfo.enabled;
+        $scope.inventoryEnabled = UIInventory.enabled;
 
         $http.get('api/world').success(function(data) {
             World.data = data;
@@ -30,6 +32,12 @@ game.directive ('game', function() {
 
         $scope.toggleDebugger = function () {
             $scope.debugEnabled = Debugger.enabled = !Debugger.enabled;
+        };
+        $scope.togglePlayerInfo = function () {
+            $scope.playerInfoEnabled = UIPlayerInfo.enabled = !UIPlayerInfo.enabled;
+        };
+        $scope.toggleInventory = function () {
+            $scope.inventoryEnabled = UIInventory.enabled = !UIInventory.enabled;
         };
     }];
     return {

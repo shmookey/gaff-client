@@ -1,0 +1,12 @@
+<div class="player-info ui-window" ng-show="visible">
+  <div class="title">Player Info</div>
+  <div class="content">
+    <div class="flags">
+      <div class="title">Progress flags</div>
+      <span ng-repeat='flag in progressFlags'>
+        {{ flag }}
+      </span>
+    </div>
+    <a ng-href="{{savelink}}">Save Progress (copy link)</a>
+  </div>
+</div>

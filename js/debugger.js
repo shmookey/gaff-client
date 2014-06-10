@@ -67,6 +67,7 @@ game.directive ('debugger', function() {
         replace: true,
         templateUrl: '/partials/debugger.html',
         controller: controller,
+        scope: {},
     };
 });
 

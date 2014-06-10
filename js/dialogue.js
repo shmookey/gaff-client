@@ -1,8 +1,8 @@
-// DialogueNotActive -- A dialogue interaction event was fired outside an active conversation
+// DialogueNotActive -- A dialogue event was fired outside an active conversation
 function DialogueNotActive(){}
 DialogueNotActive.prototype = GaffException;
 
-// PromptNotActive -- A prompt interaction event was fired outside an active prompt
+// PromptNotActive -- A prompt event was fired outside an active prompt
 function PromptNotActive(){}
 PromptNotActive.prototype = GaffException;
 
@@ -32,23 +32,28 @@ game.service ('Dialogue', ['$timeout', 'Character', 'Player', function ($timeout
     this.interaction = null;  // Reference to originating SceneInteraction
     this.fnNextStep = null;   // Function to trigger the next 'step' in the conversation
     this.select = null;       // Function to select an option from a prompt
+    this.cbEnd = null;        // Callback after dialogue finished
 
-    this.beginDialogue = function (character, dialogueName, interaction) {
+    this.beginDialogue = function (character, dialogueName, interaction, cbEnd) {
         /* Start a new conversation. */
 
         self.character = character;
         self.tree = character.dialogues[dialogueName];
         self.activeLines = [];
         self.interaction = interaction;
+        self.cbEnd = cbEnd;
 
         self.step (self.tree.lines, 0, function () {
             self.endDialogue();
         });
+
     };
 
     this.endDialogue = function () {
         /* Stop the conversation. */
 
+        if (self.cbEnd) self.cbEnd ();
+        self.cbEnd = null;
         self.character = null;
         self.tree = null;
         self.activeLines = null;
@@ -128,8 +133,19 @@ game.service ('Dialogue', ['$timeout', 'Character', 'Player', function ($timeout
          cbReturn -- Function to call when prompt is complete
         */
 
+        var options = angular.copy (promptEvent.options);
         self.activeLines = [];
-        self.prompt = promptEvent.options;
+        self.prompt = [];
+        angular.forEach (promptEvent.options, function (option) {
+            if (option.condition && !Player.evaluateCondition(option.condition)) return;
+            self.prompt.push (option);
+        });
+        if (self.prompt.length == 0) {
+            // No valid options, continue
+            self.prompt = null;
+            self.select = null;
+            cbReturn ();
+        }
 
         self.select = function (index) {
             /* Select a dialogue prompt option. */
@@ -165,7 +181,8 @@ game.service ('Dialogue', ['$timeout', 'Character', 'Player', function ($timeout
 }]);
 
 game.directive ('dialogue', function () {
-    var controller = ['$scope', 'Dialogue', function ($scope, Dialogue) {
+    var controller = ['$scope', 'Dialogue', 'SceneInteraction', 'Scene', 
+      function ($scope, Dialogue, SceneInteraction, Scene) {
         var unwatchLines = null;
         var unwatchPrompt = null;
         var npcRegion = null;
@@ -189,7 +206,7 @@ game.directive ('dialogue', function () {
             }
 
             $scope.visible = true;
-            npcRegion = Dialogue.interaction.region;
+            npcRegion = SceneInteraction.determineState(Dialogue.interaction).region;
 
             // Set up watches
             unwatchLines = $scope.$watch(function(){return Dialogue.activeLines;}, onLinesChange, true);
@@ -233,7 +250,13 @@ game.directive ('dialogue', function () {
                 if (line.speaker == 'Player') {
                     displayLine.player = true;
                 } else {
-                    displayLine.style.left = npcRegion[0] + npcRegion[2];
+                    var left = npcRegion[0]
+                    var right = left + npcRegion[2];
+                    var sceneWidth = Scene.bgSize[0];
+                    if (right/sceneWidth < 0.5) 
+                        displayLine.style.left = right;
+                    else
+                        displayLine.style.right = sceneWidth - left;
                     displayLine.style.top = npcRegion[1];
                     displayLine.style.color = Dialogue.character.speechColor;
                 }
