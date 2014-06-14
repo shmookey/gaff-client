@@ -1,4 +1,4 @@
-var game = angular.module ('game',[]);
+var game = angular.module ('game',['ui.bootstrap']);
 
 game.directive('ngRightClick', function($parse) {
     return function(scope, element, attrs) {
@@ -12,7 +12,8 @@ game.directive('ngRightClick', function($parse) {
     };
 });
 
-game.service ('Game', ['$rootScope','$http', 'World', 'Assets', 'WorldMap', 'Character', function ($rootScope, $http, World, Assets, WorldMap, Character) {
+game.service ('Game', ['$rootScope','$http', 'World', 'Assets', 'WorldMap', 'Character', 'Player', 
+  function ($rootScope, $http, World, Assets, WorldMap, Character, Player) {
     var self = this;
     this.loaded = false;
     this.running = false;
@@ -33,6 +34,7 @@ game.service ('Game', ['$rootScope','$http', 'World', 'Assets', 'WorldMap', 'Cha
         Assets.loadImages(data.imageRefs, onLoad);
         WorldMap.loadMap ('initial');
         Character.onLoad (data.characters);
+        Player.start();
     }).error(function(data,status,headers,config) {
         self.error = 'Everyn is unavailable right now due to a server issue. Please try again later.';
     });

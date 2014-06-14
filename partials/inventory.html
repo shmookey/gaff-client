@@ -2,7 +2,9 @@
   <div class="title">Inventory</div>
   <div class="content">
     <div class="item-container" ng-repeat="item in items">
-      <div class="item" ng-style="item.style"></div>
+      <div class="item" tooltip-placement="bottom" tooltip="{{item.tooltip}}" ng-click="selectItem(item)" ng-class="{selected:item.selected}">
+        <div class="item-thumbnail" ng-style="item.style"></div>
+      </div>
     </div>
   </div>
 </div>

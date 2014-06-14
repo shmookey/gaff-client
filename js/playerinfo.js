@@ -18,7 +18,8 @@ game.directive ('playerinfo', function() {
         function setUpWatches () {
             watches.push($scope.$watch(function(){return Player.progressFlags;}, function(progressFlags) {
                 $scope.progressFlags = progressFlags;
-                $scope.savelink = encodeURI('/?' + progressFlags.join(','));
+                var items = Player.inventory.map(function(item){return item.name;});
+                $scope.savelink = encodeURI('/?flags=' + progressFlags.join(',') + '&inventory=' + items.join(','));
             }, true));
         }
 

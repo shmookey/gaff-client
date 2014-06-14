@@ -15,15 +15,19 @@ game.directive ('inventory', function() {
             else cancelWatches ();
         });
         
+        $scope.selectItem = function (item) {
+            item.selected = true;
+        };
+
         function setUpWatches () {
             watches.push($scope.$watch(function(){return Player.inventory;}, function(inventory) {
                 $scope.items = [];
                 for (var i=0; i<inventory.length; i++) {
+                    var model = inventory[i];
                     var item = {
-                        model: inventory[i],
-                        style: {
-                            'background-image': 'url(' + Assets.getImageURI(inventory[i].inventoryIcon) + ')',
-                        }
+                        model: model,
+                        style: { 'background-image': 'url(' + Assets.getImageURI(model.inventoryIcon) + ')', },
+                        tooltip: model.inventoryTooltip,
                     };
                     $scope.items.push(item);
                 }

@@ -8,12 +8,18 @@ game.service ('Player', ['$window', 'Scene', 'World',
     this.inventory = [];     // List of items in inventory (objects)
     this.serial = 0;         // Increment on progress update
 
-    // Load progress data from query string
-    if ($window.location.search) {
-        var flagStr = $window.location.search.substr(1);
-        var flags = flagStr.split(',');
-        this.progressFlags = flags;
-    }
+    this.start = function () {
+        // Load progress data from query string
+        var query = URI(document.URL).query(true);
+        if (query.flags) 
+            this.progressFlags = query.flags.split(',');
+        if (query.inventory) {
+            var items = query.inventory.split(',');
+            angular.forEach(items,function(item) {
+                self.takeItem (item);
+            });
+        }
+    };
 
     this.goToScene = function (scene) {
         /* Go to the specified scene.
