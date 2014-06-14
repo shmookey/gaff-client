@@ -4,12 +4,13 @@
       <div class='letter e'></div><div class='letter v'></div><div class='letter e'></div><div class='letter r'></div><div class='letter y'></div><div class='letter n'></div>
     </div>
     <div class='loading'>
+      <div ng-show='error' class='error text'>{{ error }}</div>
       <div ng-show='nImages > 0'>
-        <div ng-hide='nImages == nImagesLoaded'>
+        <div ng-hide='nImages == nImagesLoaded' class='text'>
           Loading ({{ nImagesLoaded }}/{{ nImages }})
         </div>
         <div ng-show='nImages == nImagesLoaded'>
-          <button ng-click='startGame()'>Play</button>
+          <button ng-click='startGame()'>ENTER</button>
         </div>
       </div>
     </div>

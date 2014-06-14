@@ -17,6 +17,7 @@ game.service ('Game', ['$rootScope','$http', 'World', 'Assets', 'WorldMap', 'Cha
     this.loaded = false;
     this.running = false;
     this.worldData = null;
+    this.error = null;
 
     function onLoad () {
         self.loaded = true;
@@ -27,11 +28,13 @@ game.service ('Game', ['$rootScope','$http', 'World', 'Assets', 'WorldMap', 'Cha
     }
 
     $http.get('api/world').success(function(data) {
-        this.worldData = data;
+        self.worldData = data;
         World.data = data;
         Assets.loadImages(data.imageRefs, onLoad);
         WorldMap.loadMap ('initial');
         Character.onLoad (data.characters);
+    }).error(function(data,status,headers,config) {
+        self.error = 'Everyn is unavailable right now due to a server issue. Please try again later.';
     });
 
     return this;
@@ -71,8 +74,13 @@ game.directive ('intro', function () {
         $scope.visible = true;
         $scope.nImages = -1;
         $scope.nImagesLoaded = -1;
+        $scope.error = null;
+
         $scope.$watch (function (){return Game.running;}, function(running) {
             $scope.visible = !running;
+        });
+        $scope.$watch (function (){return Game.error;}, function(error) {
+            $scope.error = error;
         });
         $scope.$watch (function (){return Assets.nImages;}, function(nImages) {
             $scope.nImages = nImages;
