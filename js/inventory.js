@@ -22,7 +22,7 @@ game.directive ('inventory', function() {
                     var item = {
                         model: inventory[i],
                         style: {
-                            'background-image': Assets.getImageURL(inventory[i].inventoryIcon),
+                            'background-image': 'url(' + Assets.getImageURI(inventory[i].inventoryIcon) + ')',
                         }
                     };
                     $scope.items.push(item);
