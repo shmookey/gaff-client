@@ -21,6 +21,7 @@
 
 .tooltip {
   .layerGlobal();
+  cursor: default;
 }
 
 .region() {
@@ -45,6 +46,7 @@
       font-size: 11pt;
       font-weight: bold;
       margin-bottom: 5px;
+      cursor: default;
     }
     >.toggle {
       float: right;
@@ -95,11 +97,11 @@
       background-color: rgba(0,0,0,0.5);
       padding: 5px;
       border-radius: 5px;
-      &.selected {
-        background-color: rgba(0,0,255,0.5);
+      &.selected, &.selected:hover {
+        background-color: rgba(64,64,128,0.25);
       }
       &:hover {
-        background-color: rgba(0,0,128,0.5);
+        background-color: rgba(0,0,0,0.25);
       }
       .item-thumbnail {
         width: 100%;

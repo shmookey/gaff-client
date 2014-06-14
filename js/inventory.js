@@ -1,5 +1,6 @@
 game.service ('UIInventory', [function() {
     this.enabled = false;
+    this.selectedItem = null;
 }]);
 
 game.directive ('inventory', function() {
@@ -16,7 +17,14 @@ game.directive ('inventory', function() {
         });
         
         $scope.selectItem = function (item) {
-            item.selected = true;
+            if (item.selected) {
+                item.selected = false;
+                UIInventory.selectedItem = null;
+            } else {
+                item.selected = true;
+                UIInventory.selectedItem.selected = false;
+                UIInventory.selectedItem = item;
+            }
         };
 
         function setUpWatches () {

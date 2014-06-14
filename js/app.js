@@ -19,9 +19,12 @@ game.service ('Game', ['$rootScope','$http', 'World', 'Assets', 'WorldMap', 'Cha
     this.running = false;
     this.worldData = null;
     this.error = null;
+    
+    var query = URI(document.URL).query(true);
 
     function onLoad () {
         self.loaded = true;
+        if (query.autostart == '1') self.start();
     }
 
     this.start = function () {

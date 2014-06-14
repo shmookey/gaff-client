@@ -12,13 +12,15 @@ game.service ('Player', ['$window', 'Scene', 'World',
         // Load progress data from query string
         var query = URI(document.URL).query(true);
         if (query.flags) 
-            this.progressFlags = query.flags.split(',');
+            self.progressFlags = query.flags.split(',');
         if (query.inventory) {
             var items = query.inventory.split(',');
             angular.forEach(items,function(item) {
                 self.takeItem (item);
             });
         }
+        if (query.scene)
+            self.goToScene (query.scene);
     };
 
     this.goToScene = function (scene) {

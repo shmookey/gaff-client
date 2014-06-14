@@ -18,9 +18,24 @@ game.directive ('playerinfo', function() {
         function setUpWatches () {
             watches.push($scope.$watch(function(){return Player.progressFlags;}, function(progressFlags) {
                 $scope.progressFlags = progressFlags;
-                var items = Player.inventory.map(function(item){return item.name;});
-                $scope.savelink = encodeURI('/?flags=' + progressFlags.join(',') + '&inventory=' + items.join(','));
+                rebuildSaveLink();
             }, true));
+            watches.push($scope.$watch(function(){return Player.inventory;}, function(inventory) {
+                rebuildSaveLink();
+            }, true));
+            watches.push($scope.$watch(function(){return Player.scene;}, function(scene) {
+                rebuildSaveLink();
+            }, true));
+        }
+
+        function rebuildSaveLink () {
+            var state = [];
+            var items = Player.inventory.map(function(item){return item.name;});
+            if (Player.progressFlags.length > 0) state.push ('flags=' + Player.progressFlags.join(','));
+            if (Player.inventory.length > 0) state.push ('inventory=' + items.join(','));
+            if (Player.scene) state.push ('scene=' + Player.scene.name);
+            state.push ('autostart=1');
+            $scope.savelink = encodeURI('/?' + state.join('&'));
         }
 
         function cancelWatches () {
