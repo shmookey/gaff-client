@@ -3,7 +3,8 @@ game.service ('UIInventory', [function() {
 }]);
 
 game.directive ('inventory', function() {
-    var controller = ['$scope', 'Player', 'UIInventory', function ($scope, Player, UIInventory) {
+    var controller = ['$scope', 'Player', 'UIInventory','Assets',
+      function ($scope, Player, UIInventory, Assets) {
         var watches = [];
         $scope.visible = false;
         $scope.items = null;
@@ -16,7 +17,16 @@ game.directive ('inventory', function() {
         
         function setUpWatches () {
             watches.push($scope.$watch(function(){return Player.inventory;}, function(inventory) {
-                $scope.items = inventory;
+                $scope.items = [];
+                for (var i=0; i<inventory.length; i++) {
+                    var item = {
+                        model: inventory[i],
+                        style: {
+                            'background-image': Assets.getImageURL(inventory[i].inventoryIcon),
+                        }
+                    };
+                    $scope.items.push(item);
+                }
             }, true));
         }
 
