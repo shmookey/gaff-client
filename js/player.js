@@ -4,10 +4,11 @@ game.service ('Player', ['$window', 'Scene', 'World',
     var reTokens = new RegExp (/[^ &|()!]+/g);
 
     this.scene = null;
-    this.progressFlags = [];    // List of progress markers earned
-    this.inventory = [];        // List of items in inventory
-    this.serial = 0;            // Increment on progress update
+    this.progressFlags = []; // List of progress markers earned (strings)
+    this.inventory = [];     // List of items in inventory (objects)
+    this.serial = 0;         // Increment on progress update
 
+    // Load progress data from query string
     if ($window.location.search) {
         var flagStr = $window.location.search.substr(1);
         var flags = flagStr.split(',');

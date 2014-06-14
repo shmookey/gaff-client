@@ -1,0 +1,54 @@
+.intro {
+  z-index: 35000;
+  > * { z-index: 35000; }
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: #a6745a;
+  background-image: url(../images/titlebg.jpg);
+  background-size: cover;
+  .content-box {
+    position: relative;
+    width: 768px;
+    margin: 0 auto;
+    height: 202px;
+    top: 50%;
+    margin-top: -214px;
+  }
+}
+
+.title {
+  height: 128px;
+  width: 100%;
+  .letter {
+    width:128px;
+    height:128px;
+    display: inline-block;
+    background-size: 128px 128px;
+    background-repeat: no-repeat;
+    //margin-right: 12px;
+    &.e { background-image: url('../images/lettering/E.gif'); }
+    &.v { background-image: url('../images/lettering/V.gif'); }
+    &.r { background-image: url('../images/lettering/R.gif'); }
+    &.y { background-image: url('../images/lettering/Y.gif'); }
+    &.n { background-image: url('../images/lettering/N.gif'); }
+  }
+}
+
+.loading {
+  width: 768px;
+  height: 54px;
+  background-color: black;
+  opacity: 0.8;
+  border-radius: 20px;
+  margin-top: 20px;
+  font-size:1.2em;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  button {
+    color: black;
+    border-radius: 5px;
+  }
+}

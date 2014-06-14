@@ -12,23 +12,41 @@ game.directive('ngRightClick', function($parse) {
     };
 });
 
+game.service ('Game', ['$rootScope','$http', 'World', 'Assets', 'WorldMap', 'Character', function ($rootScope, $http, World, Assets, WorldMap, Character) {
+    var self = this;
+    this.loaded = false;
+    this.running = false;
+    this.worldData = null;
+
+    function onLoad () {
+        self.loaded = true;
+    }
+
+    this.start = function () {
+        self.running = true; 
+    }
+
+    $http.get('api/world').success(function(data) {
+        this.worldData = data;
+        World.data = data;
+        Assets.loadImages(data.imageRefs, onLoad);
+        WorldMap.loadMap ('initial');
+        Character.onLoad (data.characters);
+    });
+
+    return this;
+}]);
+
 game.directive ('game', function() {
     var link = function (scope, element, attrs) {
         $('.toolbar button').tooltip({container:'.toolbar'});
     };
 
-    var controller = ['$scope', '$http', 'World', 'WorldMap', 'Assets', 'Character', 'UIPlayerInfo', 'UIInventory', 'Debugger',
-      function($scope, $http, World, WorldMap, Assets, Character, UIPlayerInfo, UIInventory, Debugger) {
+    var controller = ['$scope', 'Game', 'UIPlayerInfo', 'UIInventory', 'Debugger',
+      function($scope, Game, UIPlayerInfo, UIInventory, Debugger) {
         $scope.debugEnabled = Debugger.enabled;
         $scope.playerInfoEnabled = UIPlayerInfo.enabled;
         $scope.inventoryEnabled = UIInventory.enabled;
-
-        $http.get('api/world').success(function(data) {
-            World.data = data;
-            Assets.imageRefs = data.imageRefs;
-            WorldMap.loadMap ('initial');
-            Character.onLoad (data.characters);
-        });
 
         $scope.toggleDebugger = function () {
             $scope.debugEnabled = Debugger.enabled = !Debugger.enabled;
@@ -48,3 +66,29 @@ game.directive ('game', function() {
     }
 });
 
+game.directive ('intro', function () {
+    var controller = ['$scope', 'Game', 'Assets', function ($scope, Game, Assets) {
+        $scope.visible = true;
+        $scope.nImages = -1;
+        $scope.nImagesLoaded = -1;
+        $scope.$watch (function (){return Game.running;}, function(running) {
+            $scope.visible = !running;
+        });
+        $scope.$watch (function (){return Assets.nImages;}, function(nImages) {
+            $scope.nImages = nImages;
+        });
+        $scope.$watch (function (){return Assets.nImagesLoaded;}, function(nImagesLoaded) {
+            $scope.nImagesLoaded = nImagesLoaded;
+        });
+        $scope.startGame = function () {
+            Game.start();
+        };
+    }];
+
+    return {
+        restrict: 'E',
+        scope: {},
+        controller: controller,
+        templateUrl: 'partials/intro.html',
+    };
+});

@@ -1,0 +1,17 @@
+<div class='intro' ng-show='visible'>
+  <div class='content-box'>
+    <div class='title'>
+      <div class='letter e'></div><div class='letter v'></div><div class='letter e'></div><div class='letter r'></div><div class='letter y'></div><div class='letter n'></div>
+    </div>
+    <div class='loading'>
+      <div ng-show='nImages > 0'>
+        <div ng-hide='nImages == nImagesLoaded'>
+          Loading ({{ nImagesLoaded }}/{{ nImages }})
+        </div>
+        <div ng-show='nImages == nImagesLoaded'>
+          <button ng-click='startGame()'>Play</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
